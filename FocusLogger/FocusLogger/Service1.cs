@@ -24,5 +24,10 @@ namespace FocusLogger
         protected override void OnStop()
         {
         }
+
+        public void onDebug()
+        {
+            OnStart(null);
+        }
     }
 }
