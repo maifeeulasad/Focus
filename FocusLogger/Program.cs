@@ -10,6 +10,7 @@ namespace FocusLogger
     {
         static void Main(string[] args)
         {
+            new FocusDetection();
         }
     }
 }
