@@ -75,10 +75,10 @@ namespace FocusLogger
         string CreateLoggingFile()
         {
             string dateToday = DateTime.Now.ToString("yyyy-dd-MM");
-            string todaysFile = Path.Combine(pathDirectory , dateToday + ".xml");
-            if (!File.Exists(todaysFile))
+            todaysFilePath = Path.Combine(pathDirectory , dateToday + ".xml");
+            if (!File.Exists(todaysFilePath))
             {
-                using (StreamWriter sw = File.CreateText(todaysFile))
+                using (StreamWriter sw = File.CreateText(todaysFilePath))
                 {
                     sw.WriteLine("<?xml version=\"1.0\" ?>");
                     sw.WriteLine("<log>");
@@ -87,7 +87,21 @@ namespace FocusLogger
                 }
             }
 
-            return todaysFile;
+            documentLogging.Load(todaysFilePath);
+
+
+            XmlElement startRecord = documentLogging.CreateElement("start");
+
+
+            XmlElement timestampEmptyElement = documentLogging.CreateElement("timestamp");
+            timestampEmptyElement.InnerText = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss zzz");
+
+            startRecord.AppendChild(timestampEmptyElement);
+
+            documentLogging.DocumentElement.AppendChild(startRecord);
+            documentLogging.Save(todaysFilePath);
+
+            return todaysFilePath;
         }
 
 
@@ -169,7 +183,14 @@ namespace FocusLogger
 
             XmlElement emptyRecord = documentLogging.CreateElement("empty");
 
-            emptyRecord.InnerText = "Process doesn't exist";
+
+            XmlElement timestampEmptyElement = documentLogging.CreateElement("timestamp");
+            timestampEmptyElement.InnerText = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss zzz");
+            XmlElement messageEmptyElement = documentLogging.CreateElement("timestamp");
+            messageEmptyElement.InnerText = "Process doesn't exist";
+
+            emptyRecord.AppendChild(timestampEmptyElement);
+            emptyRecord.AppendChild(messageEmptyElement);
 
             documentLogging.DocumentElement.AppendChild(emptyRecord);
             documentLogging.Save(todaysFilePath);
