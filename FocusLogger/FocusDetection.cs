@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace FocusLogger
 {
@@ -50,8 +52,50 @@ namespace FocusLogger
         static WinEventDelegate 
             procDelegate = new WinEventDelegate(WinEventProc);
 
+        #if DEBUG
+            static string pathProgramFiles = "D:/";
+        #else
+            static string pathProgramFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        #endif
+        static string pathDirectory = Path.Combine( pathProgramFiles, "focus");
+        static string todaysFilePath;
+
+        static XmlDocument documentLogging = new XmlDocument();
+
+
+        void CreateLoggingDirectory()
+        {
+            if (!Directory.Exists(pathDirectory))
+            {
+                Directory.CreateDirectory(pathDirectory);
+            }
+
+        }
+
+        string CreateLoggingFile()
+        {
+            string dateToday = DateTime.Now.ToString("yyyy-dd-MM");
+            string todaysFile = Path.Combine(pathDirectory , dateToday + ".xml");
+            if (!File.Exists(todaysFile))
+            {
+                using (StreamWriter sw = File.CreateText(todaysFile))
+                {
+                    sw.WriteLine("<?xml version=\"1.0\" ?>");
+                    sw.WriteLine("<log>");
+                    sw.WriteLine("");
+                    sw.WriteLine("</log>");
+                }
+            }
+
+            return todaysFile;
+        }
+
+
         public FocusDetection()
         {
+            CreateLoggingDirectory();
+            todaysFilePath = CreateLoggingFile();
+
             hhook =
                 SetWinEventHook(EVENT_SYSTEM_FOREGROUND,
                 EVENT_SYSTEM_FOREGROUND,
@@ -79,10 +123,6 @@ namespace FocusLogger
             uint dwmsEventTime
         )
         {
-            Console.WriteLine("Foreground changed to {0:x8}", hwnd.ToInt32());
-
-            //Console.WriteLine("ObjectID changed to {0:x8}", idObject);
-            //Console.WriteLine("ChildID changed to {0:x8}", idChild);
             GetForegroundProcessName();
         }
 
@@ -95,6 +135,8 @@ namespace FocusLogger
             uint pid;
             GetWindowThreadProcessId(hwnd, out pid);
 
+            documentLogging.Load(todaysFilePath);
+
             foreach (System.Diagnostics.Process
                 p
                 in
@@ -103,13 +145,34 @@ namespace FocusLogger
             {
                 if (p.Id == pid)
                 {
-                    Console.WriteLine("Pid is: {0}", pid);
-                    Console.WriteLine("Process name is {0}", p.ProcessName);
+
+                    XmlElement record = documentLogging.CreateElement("record");
+
+                    XmlElement processNameElement = documentLogging.CreateElement("process");
+                    processNameElement.InnerText = p.ProcessName;
+                    XmlElement pidElement = documentLogging.CreateElement("pid");
+                    pidElement.InnerText = pid.ToString();
+                    XmlElement timestampElement = documentLogging.CreateElement("timestamp");
+                    timestampElement.InnerText = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss zzz");
+
+                    record.AppendChild(processNameElement);
+                    record.AppendChild(pidElement);
+                    record.AppendChild(timestampElement);
+
+                    documentLogging.DocumentElement.AppendChild(record);
+                    documentLogging.Save(todaysFilePath);
+
                     return;
                 }
             }
 
-            Console.WriteLine("null");
+
+            XmlElement emptyRecord = documentLogging.CreateElement("empty");
+
+            emptyRecord.InnerText = "Process doesn't exist";
+
+            documentLogging.DocumentElement.AppendChild(emptyRecord);
+            documentLogging.Save(todaysFilePath);
         }
     }
 }
