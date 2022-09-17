@@ -74,7 +74,7 @@ namespace FocusLogger
 
         string CreateLoggingFile()
         {
-            string dateToday = DateTime.Now.ToString("yyyy-dd-MM");
+            string dateToday = DateTime.Now.ToString("yyyy-MM-dd");
             todaysFilePath = Path.Combine(pathDirectory , dateToday + ".xml");
             if (!File.Exists(todaysFilePath))
             {

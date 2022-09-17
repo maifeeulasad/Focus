@@ -15,13 +15,33 @@
     "sourceMap": false,
     "locale": "zh-CN",
     "baseUrl": ".",
-    "types": ["webpack-env", "node"],
+    "types": [
+      "webpack-env",
+      "node"
+    ],
     "paths": {
-      "@/*": ["app/*"],
-      "@root/*": ["*"]
+      "@/*": [
+        "app/*"
+      ],
+      "@root/*": [
+        "*"
+      ]
     },
-    "lib": ["esnext", "dom", "scripthost"]
+    "lib": [
+      "esnext",
+      "dom",
+      "scripthost"
+    ]
   },
-  "include": ["types", "app"],
-  "exclude": ["node_modules", "build", "dist", "release", "assets"]
+  "include": [
+    "types",
+    "app"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist",
+    "release",
+    "assets"
+  ]
 }

@@ -1,11 +1,11 @@
 declare namespace queryTestInfoUsingGET {
-  interface Params {}
+    interface Params {}
 
-  interface Response {
-    code: number
-    status: boolean
-    data: {
-      info: string
+    interface Response {
+        code: number
+        status: boolean
+        data: {
+            info: string
+        }
     }
-  }
 }

@@ -11,12 +11,12 @@ initRenderer()
 let createConfig: CreateConfig
 
 function renderApp() {
-  reactDom.render(<App createConfig={createConfig} />, document.getElementById('app'))
+    reactDom.render(<App createConfig={createConfig} />, document.getElementById('app'))
 }
 
 ipcRenderer.on('dom-ready', (event, data) => {
-  createConfig = data
-  renderApp()
+    createConfig = data
+    renderApp()
 })
 
 // 组件热更新

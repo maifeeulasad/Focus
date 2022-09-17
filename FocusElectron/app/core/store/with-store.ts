@@ -8,36 +8,38 @@ export type MapStateList = (StoreStateKeys | AliasStates)[] | AliasStates
  * @param mapStates
  */
 export function withStore(options: MapStateList): any {
-  return connect(mapStates(options), (dispatch: any) => new Object({ dispatch }), undefined, {
-    forwardRef: true,
-  })
+    return connect(mapStates(options), (dispatch: any) => new Object({ dispatch }), undefined, {
+        forwardRef: true,
+    })
 }
 
-export function mapStates(options: MapStateList): MapStateToPropsParam<unknown, unknown, StoreStates> {
-  return (states: StoreStates) => {
-    const resState = {}
-    if (options instanceof Array) {
-      options.forEach((val) => {
-        if (typeof val === 'string') {
-          resState[val] = states[val]
+export function mapStates(
+    options: MapStateList
+): MapStateToPropsParam<unknown, unknown, StoreStates> {
+    return (states: StoreStates) => {
+        const resState = {}
+        if (options instanceof Array) {
+            options.forEach((val) => {
+                if (typeof val === 'string') {
+                    resState[val] = states[val]
+                } else {
+                    Object.assign(resState, mapAliasStates(val, states))
+                }
+            })
         } else {
-          Object.assign(resState, mapAliasStates(val, states))
+            Object.assign(resState, mapAliasStates(options, states))
         }
-      })
-    } else {
-      Object.assign(resState, mapAliasStates(options, states))
+        return resState
     }
-    return resState
-  }
 }
 
 function mapAliasStates(alias: AliasStates, states: StoreStates) {
-  const resState = {}
+    const resState = {}
 
-  for (const key in alias) {
-    const statesKey = alias[key]
-    resState[key] = states[statesKey]
-  }
+    for (const key in alias) {
+        const statesKey = alias[key]
+        resState[key] = states[statesKey]
+    }
 
-  return resState
+    return resState
 }

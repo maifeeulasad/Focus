@@ -12,20 +12,20 @@ export const USER_DATA_PATH: string = app.getPath('userData')
 
 /** 应用程序的日志文件夹 */
 export const LOGS_PATH: string =
-  process.platform === 'darwin'
-    ? path.resolve(app.getPath('logs'), `../${app.name}`)
-    : path.resolve(USER_DATA_PATH, 'logs')
+    process.platform === 'darwin'
+        ? path.resolve(app.getPath('logs'), `../${app.name}`)
+        : path.resolve(USER_DATA_PATH, 'logs')
 
 /** 资源文件夹 */
 export const ASSETS_PATH: string =
-  process.env.NODE_ENV === 'development' ? 'assets' : path.join(APP_PATH, 'assets')
+    process.env.NODE_ENV === 'development' ? 'assets' : path.join(APP_PATH, 'assets')
 
 /**
  * 转换资源路径
  * @param pathStr
  */
 export function asAssetsPath(pathStr: string): string {
-  return path.join(ASSETS_PATH, pathStr)
+    return path.join(ASSETS_PATH, pathStr)
 }
 
 /**
@@ -33,5 +33,5 @@ export function asAssetsPath(pathStr: string): string {
  * @param pathStr
  */
 export function asAbsolutePath(pathStr: string): string {
-  return path.resolve(APP_PATH, pathStr)
+    return path.resolve(APP_PATH, pathStr)
 }

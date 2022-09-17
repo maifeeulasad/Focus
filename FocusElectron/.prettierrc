@@ -1,11 +1,11 @@
 {
-  "tabWidth": 4,
-  "printWidth": 100,
-  "proseWrap": "never",
-  "eslintIntegration": true,
-  "singleQuote": true,
-  "semi": false,
-  "trailingComma": "es5",
-  "arrowParens": "always",
-  "endOfLine": "auto"
+    "tabWidth": 4,
+    "printWidth": 100,
+    "proseWrap": "never",
+    "eslintIntegration": true,
+    "singleQuote": true,
+    "semi": false,
+    "trailingComma": "es5",
+    "arrowParens": "always",
+    "endOfLine": "auto"
 }

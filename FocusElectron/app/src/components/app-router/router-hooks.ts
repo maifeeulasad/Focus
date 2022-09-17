@@ -4,7 +4,10 @@
  * @param next 继续渲染
  * @this AppRouter
  */
-export function beforeRouter(props: PageProps, next: () => void): boolean | void | Promise<boolean | void> {
-  window.dispatchEvent(new CustomEvent('router-update', { detail: props }))
-  next()
+export function beforeRouter(
+    props: PageProps,
+    next: () => void
+): boolean | void | Promise<boolean | void> {
+    window.dispatchEvent(new CustomEvent('router-update', { detail: props }))
+    next()
 }
