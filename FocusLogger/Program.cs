@@ -1,11 +1,8 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
-namespace FocusLogger
+﻿namespace FocusLogger
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main(string[] _)
         {
             new FocusDetection();
         }
